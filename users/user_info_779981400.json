@@ -1,0 +1,24 @@
+{
+    "gender": "Мужской",
+    "age": "18",
+    "weight": "80",
+    "goal": "Снижение массы",
+    "activity": "Легкая активность (небольшие упражнения 1-3 раза в неделю)",
+    "water_reminder": "on",
+    "norm_of_water": 2.25,
+    "date_for_water": "2024-06-22",
+    "date_for_calories_and_pfc": "2024-06-22",
+    "calories": 1054,
+    "pfc": {
+        "proteins": 36,
+        "fats": 33,
+        "carbohydrates": 151
+    },
+    "norm_of_calories": 2228,
+    "norm_of_pfc": {
+        "proteins": 140,
+        "fats": 92,
+        "carbohydrates": 160
+    },
+    "intermediate_result": null
+}

@@ -1,0 +1,30 @@
+{
+    "gender": "Мужской",
+    "age": "18",
+    "weight": "110",
+    "goal": "Снижение массы",
+    "activity": "Сидячий образ жизни, никаких упражнений",
+    "water_reminder": "off",
+    "norm_of_water": 3.0,
+    "date_for_water": "2024-06-22",
+    "date_for_calories_and_pfc": "2024-06-22",
+    "calories": 575,
+    "pfc": {
+        "proteins": 26,
+        "fats": 13,
+        "carbohydrates": 91
+    },
+    "norm_of_calories": 2122,
+    "norm_of_pfc": {
+        "proteins": 192,
+        "fats": 126,
+        "carbohydrates": 220
+    },
+    "intermediate_result": {
+        "sum_weight": 519,
+        "sum_calories": 218,
+        "sum_protein": 0,
+        "sum_fat": 1,
+        "sum_carbohydrate": 54
+    }
+}
