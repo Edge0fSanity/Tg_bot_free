@@ -1,12 +1,13 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
+        /*stage('Checkout') {
             steps {
                 // Проверка кода из вашего репозитория
                 git 'https://github.com/Edge0fSanity/Tg_bot_free.git'
             }
         }
+        */
         stage('Install Dependencies') {
             steps {
                 // Установка зависимостей
