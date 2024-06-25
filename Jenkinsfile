@@ -7,7 +7,7 @@ pipeline {
                 git 'https://github.com/Edge0fSanity/Tg_bot_free.git'
             }
         }
-        */
+        
         stage('Install Dependencies') {
             steps {
                 // Установка зависимостей
@@ -20,6 +20,7 @@ pipeline {
                 echo "Тестов нет"
             }
         }
+        */
         stage('Build Docker Image') {
             steps {
                 // Построение Docker-образа
