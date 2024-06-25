@@ -1,13 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.9'
-            args '-u root'
-        }
-    }
-    environment {
-        // Установите переменные окружения, если необходимо
-    }
+    agent any
     stages {
         stage('Checkout') {
             steps {
