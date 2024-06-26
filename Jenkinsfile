@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script{
                     // Построение Docker-образа
-                    docker.build('Tg_bot_free')
+                    docker.build()
                 }
             }
         }
