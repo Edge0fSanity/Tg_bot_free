@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script{
                     // Построение Docker-образа
-                    docker.build('tgbotfree:latest')
+                    docker.build('Tg_bot_free')
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline {
                 // Удаление старого контейнера
                 sh 'docker rm -f Tg_bot_free || true'
                 // Развертывание Docker-контейнера
-                sh 'docker run -d --name tg_bot_free tgbotfree:latest'
+                sh 'docker run -d --name tg_bot_free Tg_bot_free:latest'
             }
         }
     }
