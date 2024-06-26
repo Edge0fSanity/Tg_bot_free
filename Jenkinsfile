@@ -4,7 +4,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Проверка кода из вашего репозитория
-                git 'https://github.com/Edge0fSanity/Tg_bot_free.git'
+                git branch: 'main', 
+                    url: 'https://github.com/Edge0fSanity/Tg_bot_free.git'
             }
         }
         /*
@@ -25,7 +26,7 @@ pipeline {
             steps {
                 script{
                     // Построение Docker-образа
-                    docker.build()
+                    docker.build('Tg_bot_free')
                 }
             }
         }
