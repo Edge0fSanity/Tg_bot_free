@@ -22,7 +22,7 @@ pipeline {
         }
         */
         stage('Build Docker Image') {
-            steps {
+            script {
                 // Построение Docker-образа
                 docker.build('tgbotfree:latest')
             }
