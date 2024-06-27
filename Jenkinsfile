@@ -26,16 +26,16 @@ pipeline {
             steps {
                 script{
                     // Построение Docker-образа
-                    docker.build('Tg_bot_free')
+                    docker.build('tg_bot_free')
                 }
             }
         }
         stage('Deploy') {
             steps {
                 // Удаление старого контейнера
-                sh 'docker rm -f Tg_bot_free || true'
+                sh 'docker rm -f tg_bot_free || true'
                 // Развертывание Docker-контейнера
-                sh 'docker run -d --name tg_bot_free Tg_bot_free:latest'
+                sh 'docker run -d --name tg_bot_free tg_bot_free:latest'
             }
         }
     }
