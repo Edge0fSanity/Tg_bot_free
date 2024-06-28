@@ -276,13 +276,13 @@ async def edit_profile(message: types.Message):
     await message.answer("Чтобы изменить профиль, заполните заново анкету", reply_markup=kb)
 
 
-@dp.message_handler(text="Записать изменение веса")
+@dp.message_handler(text="Записать изменение веса") # Функция, для которой нет кнопки
 async def weight_change(message: types.Message):
     await message.answer("Введите ваш новый вес", reply_markup=types.ReplyKeyboardRemove())
     await FormNewWeight.new_weight.set()
 
 
-@dp.message_handler(state=FormNewWeight.new_weight)
+@dp.message_handler(state=FormNewWeight.new_weight)     # Функция, которая никогда не вызывается
 async def weight_change(message: types.Message, state: FSMContext):
     if not message.text.replace('.', '', 1).replace(',', '', 1).isdigit():
         await message.answer("Пожалуйста, введите число")
