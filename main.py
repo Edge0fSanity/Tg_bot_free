@@ -7,10 +7,12 @@ import datetime
 import json
 import parse_pfc
 import os
+import logging
 
+logging.basicConfig(level=logging.INFO)
 bot = Bot(token=TOKEN, parse_mode=types.ParseMode.HTML)
 storage = MemoryStorage()
-dp = Dispatcher(bot, storage=storage)
+dp = Dispatcher(bot, storage=storage) 
 admins_id = [834981315, 779981400,1091119932]
 
 class Form(StatesGroup):
@@ -225,7 +227,7 @@ async def form(message: types.Message, state: FSMContext):
     with open(f"users/user_info_{message.chat.id}.json", 'w', encoding='utf-8') as file:
         json.dump(user_info, file, ensure_ascii=False, indent=4)
     await state.finish()
-    await message.answer("Спасибо за предоставленную информацию!", reply_markup=kb)
+    await message.answer("Отлично, данные добавлены !", reply_markup=kb)
 
 
 @dp.message_handler(text="Главное меню")
@@ -438,11 +440,15 @@ async def mailing(message: types.Message):
         await message.answer("У вас нет прав администратора")
 
 
-@dp.message_handler(state=AdminForm.text)
+@dp.message_handler(state=AdminForm.text, content_types=['photo'])
 async def mailing(message: types.Message, state: FSMContext):
     for user in os.listdir('users'):
         user = user.split('_')[-1].split('.')[0]
-        await bot.send_message(user, message.text)
+        if message.photo:
+            await bot.send_photo(user, photo=message.photo[-1].file_id, caption=message.caption)
+        else:
+            await bot.send_message(user, message.text)
+    logging.info("[INFO] Admin has sent a message")
     await state.finish()
     await message.answer("Рассылка завершена",reply_markup=types.ReplyKeyboardMarkup
     (resize_keyboard=True).row(types.KeyboardButton(text="Назад")))

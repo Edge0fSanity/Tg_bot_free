@@ -5,8 +5,8 @@
     "goal": "Снижение массы",
     "activity": "Сидячий образ жизни, никаких упражнений",
     "water_reminder": "off",
-    "norm_of_water": 3.0,
-    "date_for_water": "2024-06-22",
+    "norm_of_water": -1.5,
+    "date_for_water": "2024-06-24",
     "date_for_calories_and_pfc": "2024-06-22",
     "calories": 575,
     "pfc": {
