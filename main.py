@@ -98,7 +98,19 @@ async def start(message: types.Message):
     if os.path.exists(f"users/user_info_{message.chat.id}.json"):
         kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Профиль")).row(
             types.KeyboardButton('Дневник питания')).row(types.KeyboardButton('Напоминание'))
+        
+        with open(f'users/user_info_{message.chat.id}.json', 'r', encoding='utf-8') as file:
+            user_info = json.load(file)
+
         await message.answer("Главное меню", reply_markup=kb)
+        await message.answer(f'За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\nБЖУ: '
+                        f'{user_info["pfc"]["proteins"]}/{user_info["pfc"]["fats"]}/'
+                        f'{user_info["pfc"]["carbohydrates"]} из {user_info["norm_of_pfc"]["proteins"]}/'
+                        f'{user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}',
+                        reply_markup=kb)
+        remaining = user_info['norm_of_water'] / 0.25
+        await message.answer(f"Вы выпили стакан воды. Вам осталось выпить {user_info['norm_of_water']}л воды или "
+                        f" {remaining} стаканов на сегодня.")
     else:
         kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Заполнить анкету"))
         await message.answer("У меня нет ваших данных. Пожалуйста, заполните анкету", reply_markup=kb)
@@ -107,7 +119,7 @@ async def start(message: types.Message):
 @dp.message_handler(text="Заполнить анкету")
 async def form(message: types.Message):
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Мужской"),
-                                                             types.KeyboardButton(text="Женский"))
+                                                            types.KeyboardButton(text="Женский"))
     await message.answer("Какой у вас пол?", reply_markup=kb)
     await Form.next()
 
@@ -128,7 +140,7 @@ async def form(message: types.Message, state: FSMContext):
 async def form(message: types.Message, state: FSMContext):
     if message.text == 'Заполнить анкету заново':
         kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Мужской"),
-                                                                 types.KeyboardButton(text="Женский"))
+                                                                types.KeyboardButton(text="Женский"))
         await message.answer("Какой у вас пол?", reply_markup=kb)
         await state.finish()
         await Form.gender.set()
@@ -148,7 +160,7 @@ async def form(message: types.Message, state: FSMContext):
 async def form(message: types.Message, state: FSMContext):
     if message.text == 'Заполнить анкету заново':
         kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Мужской"),
-                                                                 types.KeyboardButton(text="Женский"))
+                                                                types.KeyboardButton(text="Женский"))
         await message.answer("Какой у вас пол?", reply_markup=kb)
         await state.finish()
         await Form.gender.set()
@@ -171,7 +183,7 @@ async def form(message: types.Message, state: FSMContext):
 async def form(message: types.Message, state: FSMContext):
     if message.text == 'Заполнить анкету заново':
         kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Мужской"),
-                                                                 types.KeyboardButton(text="Женский"))
+                                                                types.KeyboardButton(text="Женский"))
         await message.answer("Какой у вас пол?", reply_markup=kb)
         await state.finish()
         await Form.gender.set()
@@ -184,10 +196,10 @@ async def form(message: types.Message, state: FSMContext):
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(
         types.KeyboardButton(text="Сидячий образ жизни, никаких упражнений")).row(
         types.KeyboardButton(text='Легкая активность (небольшие '
-                                  'упражнения 1-3 раза в неделю)')).row(
+                                    'упражнения 1-3 раза в неделю)')).row(
         types.KeyboardButton(text='Высокая активность ('
-                                  'тренируюсь более 4-х раз в '
-                                  'неделю)')).row(types.KeyboardButton('Заполнить анкету заново'))
+                                    'тренируюсь более 4-х раз в '
+                                    'неделю)')).row(types.KeyboardButton('Заполнить анкету заново'))
     await message.answer("Опишите ваш уровень физической активности.", reply_markup=kb)
     await Form.next()
 
@@ -196,13 +208,13 @@ async def form(message: types.Message, state: FSMContext):
 async def form(message: types.Message, state: FSMContext):
     if message.text == 'Заполнить анкету заново':
         kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Мужской"),
-                                                                 types.KeyboardButton(text="Женский"))
+                                                                types.KeyboardButton(text="Женский"))
         await message.answer("Какой у вас пол?", reply_markup=kb)
         await state.finish()
         await Form.gender.set()
         return
     if message.text not in ["Сидячий образ жизни, никаких упражнений", "Легкая активность "
-                                                                       "(небольшие упражнения 1-3 раза в неделю)",
+                            "(небольшие упражнения 1-3 раза в неделю)",
                             "Высокая активность (тренируюсь более 4-х раз в неделю)"]:
         await message.answer("Пожалуйста, выберите один из предложенных вариантов")
         return
@@ -259,11 +271,11 @@ async def profile(message: types.Message):
         kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton('Изменить профиль')).row(
             types.KeyboardButton('Записать изменение веса')).row(types.KeyboardButton('Назад'))
         await message.answer(f"Ваш профиль:\n\n"
-                             f"Пол: {user_info['gender']}\n"
-                             f"Возраст: {user_info['age']}\n"
-                             f"Вес: {user_info['weight']}\n"
-                             f"Цель: {user_info['goal']}\n"
-                             f"Активность: {user_info['activity']}", reply_markup=kb)
+                            f"Пол: {user_info['gender']}\n"
+                            f"Возраст: {user_info['age']}\n"
+                            f"Вес: {user_info['weight']}\n"
+                            f"Цель: {user_info['goal']}\n"
+                            f"Активность: {user_info['activity']}", reply_markup=kb)
     except FileNotFoundError:
         kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Заполнить анкету"))
         await message.answer("У вас нет профиля. Пожалуйста, заполните анкету", reply_markup=kb)
@@ -299,7 +311,7 @@ async def weight_change(message: types.Message, state: FSMContext):
     await state.finish()
     await message.answer("Ваш вес успешно изменен", reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).row(
         types.KeyboardButton(text="Назад"))
-                         )
+                        )
 
 
 @dp.message_handler(text="Дневник питания")
@@ -366,8 +378,8 @@ async def drink_glass(message: types.Message):
     remaining = user_info['norm_of_water'] / 0.25
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Дневник питания"))
     await message.answer(f"Вы выпили стакан воды. Вам осталось выпить {user_info['norm_of_water']}л воды или "
-                         f" {remaining} стаканов на сегодня.",
-                         reply_markup=kb)
+                        f" {remaining} стаканов на сегодня.",
+                        reply_markup=kb)
 
 
 @dp.message_handler(text="Записать приём пищи")
@@ -418,10 +430,10 @@ async def add_to_food_diary(message: types.Message):
             json.dump(user_info, file, ensure_ascii=False, indent=4)
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Дневник питания"))
     await message.answer(f'За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\nБЖУ: '
-                         f'{user_info["pfc"]["proteins"]}/{user_info["pfc"]["fats"]}/'
-                         f'{user_info["pfc"]["carbohydrates"]} из {user_info["norm_of_pfc"]["proteins"]}/'
-                         f'{user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}',
-                         reply_markup=kb)
+                        f'{user_info["pfc"]["proteins"]}/{user_info["pfc"]["fats"]}/'
+                        f'{user_info["pfc"]["carbohydrates"]} из {user_info["norm_of_pfc"]["proteins"]}/'
+                        f'{user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}',
+                        reply_markup=kb)
 
 
 @dp.message_handler(text="Нет")
