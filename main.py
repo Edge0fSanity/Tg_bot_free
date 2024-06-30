@@ -9,6 +9,7 @@ from aiogram import Bot, Dispatcher, types, executor
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.types.input_file import InputFile
 from config import TOKEN
 import datetime
 import json
@@ -90,8 +91,8 @@ def main_menu_text(message):
     text = f"""Главное меню\n
 За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\n
 БЖУ: {user_info["pfc"]["proteins"]}/{user_info["pfc"]["fats"]}
-     {user_info["pfc"]["carbohydrates"]} из {user_info["norm_of_pfc"]["proteins"]}
-     {user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}\n
+          {user_info["pfc"]["carbohydrates"]} из {user_info["norm_of_pfc"]["proteins"]}
+          {user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}\n
 Вам осталось выпить {user_info['norm_of_water']}л воды
 или
 {remaining} стаканов на сегодня."""
@@ -106,6 +107,8 @@ async def start(message: types.Message):
         f"твоё тело "
         f"здоровым, "
         f"а в здоровом теле - здоровый дух", reply_markup=kb)
+    await bot.send_photo(message.from_user.id, photo=InputFile("start_picture.jpg"))
+    
 
 
 @dp.message_handler(text="Начать")
