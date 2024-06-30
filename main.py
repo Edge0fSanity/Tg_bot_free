@@ -82,6 +82,21 @@ def count_norm_of_pfc(user_info):
     }
     return user_info
 
+def main_menu_text(message):
+    with open(f'users/user_info_{message.chat.id}.json', 'r', encoding='utf-8') as file:
+        user_info = json.load(file)
+
+    remaining = user_info['norm_of_water'] / 0.25
+    text = f"""Главное меню\n
+За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\n
+БЖУ: {user_info["pfc"]["proteins"]}/{user_info["pfc"]["fats"]}
+     {user_info["pfc"]["carbohydrates"]} из {user_info["norm_of_pfc"]["proteins"]}
+     {user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}\n
+Вам осталось выпить {user_info['norm_of_water']}л воды
+или
+{remaining} стаканов на сегодня."""
+
+    return text
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
@@ -99,17 +114,7 @@ async def start(message: types.Message):
         kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Профиль")).row(
             types.KeyboardButton('Дневник питания')).row(types.KeyboardButton('Напоминание'))
         
-        with open(f'users/user_info_{message.chat.id}.json', 'r', encoding='utf-8') as file:
-            user_info = json.load(file)
-
-        remaining = user_info['norm_of_water'] / 0.25
-        text = "Главное меню\n" + f"За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\n/
-                                БЖУ:{user_info["pfc"]["proteins"]}/{user_info["pfc"]["fats"]}/
-                                {user_info["pfc"]["carbohydrates"]} из {user_info["norm_of_pfc"]["proteins"]}/
-                                {user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}\n/
-                                Вы выпили стакан воды. Вам осталось выпить {user_info['norm_of_water']}л воды или /
-                                {remaining} стаканов на сегодня."
-
+        text = main_menu_text(message)
         await message.answer(text, reply_markup=kb)
     else:
         kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Заполнить анкету"))
@@ -253,14 +258,18 @@ async def form(message: types.Message, state: FSMContext):
 async def main_menu(message: types.Message):
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Профиль")).row(
         types.KeyboardButton('Дневник питания')).row(types.KeyboardButton('Напоминание'))
-    await message.answer("Главное меню", reply_markup=kb)
+
+    text =  main_menu_text(message)
+    await message.answer(text, reply_markup=kb)
 
 
 @dp.message_handler(text="Назад")
 async def main_menu(message: types.Message):
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Профиль")).row(
         types.KeyboardButton('Дневник питания')).row(types.KeyboardButton('Напоминание'))
-    await message.answer("Главное меню", reply_markup=kb)
+    
+    text = main_menu_text(message)
+    await message.answer(text, reply_markup=kb)
 
 
 @dp.message_handler(text="Профиль")
