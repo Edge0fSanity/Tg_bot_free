@@ -102,15 +102,15 @@ async def start(message: types.Message):
         with open(f'users/user_info_{message.chat.id}.json', 'r', encoding='utf-8') as file:
             user_info = json.load(file)
 
-        await message.answer("Главное меню", reply_markup=kb)
-        await message.answer(f'За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\nБЖУ: '
-                        f'{user_info["pfc"]["proteins"]}/{user_info["pfc"]["fats"]}/'
-                        f'{user_info["pfc"]["carbohydrates"]} из {user_info["norm_of_pfc"]["proteins"]}/'
-                        f'{user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}',
-                        reply_markup=kb)
         remaining = user_info['norm_of_water'] / 0.25
-        await message.answer(f"Вы выпили стакан воды. Вам осталось выпить {user_info['norm_of_water']}л воды или "
-                        f" {remaining} стаканов на сегодня.")
+        text = "Главное меню\n" + f"За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\n/
+                                БЖУ:{user_info["pfc"]["proteins"]}/{user_info["pfc"]["fats"]}/
+                                {user_info["pfc"]["carbohydrates"]} из {user_info["norm_of_pfc"]["proteins"]}/
+                                {user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}\n/
+                                Вы выпили стакан воды. Вам осталось выпить {user_info['norm_of_water']}л воды или /
+                                {remaining} стаканов на сегодня."
+
+        await message.answer(text, reply_markup=kb)
     else:
         kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Заполнить анкету"))
         await message.answer("У меня нет ваших данных. Пожалуйста, заполните анкету", reply_markup=kb)
