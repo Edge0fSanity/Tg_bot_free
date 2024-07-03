@@ -41,6 +41,8 @@ pipeline {
                 sh 'docker run -d --name tg_bot_free tg_bot_free:latest'
                 // Копирование файлов пользователей
                 sh 'docker cp /DATA/Downloads/users_get/users tg_bot_free:/app'
+                
+                sh 'docker exec tg_bot_free chown -R appuser /app'
             }
         }
     }
