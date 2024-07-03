@@ -4,7 +4,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script{
-                    sh 'docker cp tg_bot_free:/app/users /DATA/Downloads/users_get'
+                    sh 'docker cp -a tg_bot_free:/app/users /DATA/Downloads/users_get'
                 }
                 // Проверка кода из вашего репозитория
                 git branch: 'main', 
@@ -40,9 +40,9 @@ pipeline {
                 // Развертывание Docker-контейнера
                 sh 'docker run -d --name tg_bot_free tg_bot_free:latest'
                 // Копирование файлов пользователей
-                sh 'docker cp /DATA/Downloads/users_get/users tg_bot_free:/app'
+                sh 'docker cp -a /DATA/Downloads/users_get/users tg_bot_free:/app'
                 
-                sh 'docker exec tg_bot_free chmod -R 666 /app/users'
+                //sh 'docker exec tg_bot_free chmod -R 666 /app/users'
             }
         }
     }
