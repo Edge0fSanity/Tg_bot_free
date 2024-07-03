@@ -100,9 +100,20 @@ def main_menu_text(message):
 
     return text
 
+@dp.message_handler(commands=['help'])
+async def help(message: types.Message):
+    kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Начать"))
+    await message.answer(
+        f"Появился вопрос ?"
+        f"Можешь написать разработчику - @edge0fsanity "
+        f"Может быть тебе помогут эти 2 примера ?", reply_markup=kb)
+    await bot.send_photo(message.from_user.id, photo=InputFile("start_picture.jpg"))
+    await bot.send_photo(message.from_user.id, photo=InputFile("meal_message_example.jpg"))
+
+
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
-    kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Начать"))
+    kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Назад"))
     await message.answer(
         f"Привет, {message.from_user.first_name}, я бот, призванный помочь тебе создать и поддерживать "
         f"твоё тело "
