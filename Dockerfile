@@ -10,7 +10,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 RUN apt-get update \
-    && apt-get -y install libpq-dev gcc && apt install -y git
+    && apt-get -y install libpq-dev gcc
 
 # Install pip requirements
 COPY requirements.txt .
