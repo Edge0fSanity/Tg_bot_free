@@ -3,6 +3,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                script{
+                    sh 'docker cp tg_bot_free:/app/users /DATA/Downloads/users_get'
+                }
                 // Проверка кода из вашего репозитория
                 git branch: 'main', 
                     url: 'https://github.com/Edge0fSanity/Tg_bot_free.git'
@@ -36,6 +39,8 @@ pipeline {
                 sh 'docker rm -f tg_bot_free || true'
                 // Развертывание Docker-контейнера
                 sh 'docker run -d --name tg_bot_free tg_bot_free:latest'
+                // Копирование файлов пользователей
+                sh 'docker cp /DATA/Downloads/users_get tg_bot_free:/app/users'
             }
         }
     }
