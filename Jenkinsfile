@@ -42,7 +42,7 @@ pipeline {
                 // Копирование файлов пользователей
                 sh 'docker cp /DATA/Downloads/users_get/users tg_bot_free:/app'
                 
-                sh 'docker exec tg_bot_free chown -R appuser /app'
+                sh 'docker exec tg_bot_free chmod -R 666 /app/users'
             }
         }
     }
