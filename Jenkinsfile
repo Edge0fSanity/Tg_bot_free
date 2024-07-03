@@ -3,9 +3,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                /*script{
-                    sh 'docker cp tg_bot_free:/app/users/ /DATA/Downloads/users_get'
-                }*/
+                script{
+                    sh 'docker cp tg_bot_free:/app/users /DATA/Downloads/users_get'
+                }
                 // Проверка кода из вашего репозитория
                 git branch: 'main', 
                     url: 'https://github.com/Edge0fSanity/Tg_bot_free.git'
