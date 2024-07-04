@@ -1,7 +1,6 @@
 """
 TODO: 
 Надо сделать красивое главное меню и вообще убрать это безобразие !
-Создать меню help с моими контатами
 """
 
 
@@ -92,7 +91,7 @@ def main_menu_text(message):
     text = f"""Главное меню\n
 За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\n
 БЖУ: {user_info["pfc"]["proteins"]}/{user_info["pfc"]["fats"]}
-          {user_info["pfc"]["carbohydrates"]} из {user_info["norm_of_pfc"]["proteins"]}
+          {user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["proteins"]}
           {user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}\n
 Вам осталось выпить {user_info['norm_of_water']}л воды
 или
@@ -104,8 +103,8 @@ def main_menu_text(message):
 async def help(message: types.Message):
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Начать"))
     await message.answer(
-        f"Появился вопрос ?"
-        f"Можешь написать разработчику - @edge0fsanity "
+        f"Появился вопрос ?\n"
+        f"Можешь написать разработчику - @edge0fsanity\n"
         f"Может быть тебе помогут эти 2 примера ?", reply_markup=kb)
     await bot.send_photo(message.from_user.id, photo=InputFile("start_picture.jpg"))
     await bot.send_photo(message.from_user.id, photo=InputFile("meal_message_example.jpg"))
@@ -418,11 +417,12 @@ async def food_entry(message: types.Message, state: FSMContext):
     mes_del = await message.answer("Подождите, идет обработка запроса...")
     mes, result = parse_pfc.parse_pfc(message.text)
     mes += 'Добавить в съеденное за сегодня?'
-    with open(f'users/user_info_{message.chat.id}.json', 'r', encoding='utf-8') as file:
+
+    with open(f'users/user_info_{message.chat.id}.json', 'rw', encoding='utf-8') as file:
         user_info = json.load(file)
-    user_info['intermediate_result'] = result
-    with open(f'users/user_info_{message.chat.id}.json', 'w', encoding='utf-8') as file:
+        user_info['intermediate_result'] = result
         json.dump(user_info, file, ensure_ascii=False, indent=4)
+        
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Да")).row(
         types.KeyboardButton('Нет'))
     await bot.delete_message(chat_id=message.chat.id, message_id=mes_del.message_id)
@@ -432,30 +432,21 @@ async def food_entry(message: types.Message, state: FSMContext):
 
 @dp.message_handler(text="Да")
 async def add_to_food_diary(message: types.Message):
-    with open(f'users/user_info_{message.chat.id}.json', 'r', encoding='utf-8') as file:
+    with open(f'users/user_info_{message.chat.id}.json', 'rw', encoding='utf-8') as file:
         user_info = json.load(file)
 
-    # if now time - date for calories and pfc >= 24 hours, then update date for calories and pfc
-    if ((datetime.datetime.now() - datetime.datetime.strptime(user_info['date_for_calories_and_pfc'], "%Y-%m-%d")).days
-            >= 1):
-        user_info['date_for_calories_and_pfc'] = datetime.datetime.now().strftime("%Y-%m-%d")
-        user_info['calories'] = user_info['intermediate_result']['sum_calories']
-        user_info['pfc']['proteins'] = user_info['intermediate_result']['sum_protein']
-        user_info['pfc']['fats'] = user_info['intermediate_result']['sum_fat']
-        user_info['pfc']['carbohydrates'] = user_info['intermediate_result']['sum_carbohydrate']
-        with open(f'users/user_info_{message.chat.id}.json', 'w', encoding='utf-8') as file:
-            json.dump(user_info, file, ensure_ascii=False, indent=4)
-    else:
+        # Rewrite file with a new data
         user_info['calories'] += user_info['intermediate_result']['sum_calories']
         user_info['pfc']['proteins'] += user_info['intermediate_result']['sum_protein']
         user_info['pfc']['fats'] += user_info['intermediate_result']['sum_fat']
         user_info['pfc']['carbohydrates'] += user_info['intermediate_result']['sum_carbohydrate']
-        with open(f'users/user_info_{message.chat.id}.json', 'w', encoding='utf-8') as file:
-            json.dump(user_info, file, ensure_ascii=False, indent=4)
+
+        json.dump(user_info, file, ensure_ascii=False, indent=4)
+        
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Дневник питания"))
     await message.answer(f'За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\nБЖУ: '
                         f'{user_info["pfc"]["proteins"]}/{user_info["pfc"]["fats"]}/'
-                        f'{user_info["pfc"]["carbohydrates"]} из {user_info["norm_of_pfc"]["proteins"]}/'
+                        f'{user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["proteins"]}/'
                         f'{user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}',
                         reply_markup=kb)
 
