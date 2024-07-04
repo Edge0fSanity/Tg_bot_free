@@ -116,7 +116,7 @@ async def help(message: types.Message):
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
-    kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Назад"))
+    kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Начать"))
     await message.answer(
         f"Привет, {message.from_user.first_name}, я бот, призванный помочь тебе создать и поддерживать "
         f"твоё тело "
