@@ -94,9 +94,9 @@ def main_menu_text(message):
     remaining = user_info['norm_of_water'] / 0.25
     text = f"""Главное меню\n
 За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\n
-БЖУ: {user_info["pfc"]["proteins"]}/{user_info["pfc"]["fats"]}
-          {user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["proteins"]}
-          {user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}\n
+БЖУ: {user_info["pfc"]["proteins"]}/{user_info["norm_of_pfc"]["proteins"]}
+          {user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["carbohydrates"]}
+          {user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["fats"]}\n
 Вам осталось выпить {user_info['norm_of_water']}л воды
 или
 {remaining} стаканов на сегодня."""
