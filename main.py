@@ -96,8 +96,9 @@ def main_menu_text(message):
     text = f"""Главное меню\n
 За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\n
 БЖУ: {user_info["pfc"]["proteins"]}/{user_info["norm_of_pfc"]["proteins"]}
-          {user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["carbohydrates"]}
           {user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["fats"]}\n
+          {user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["carbohydrates"]}
+          
 Вам осталось выпить {user_info['norm_of_water']}л воды
 или
 {remaining} стаканов на сегодня."""
@@ -454,9 +455,9 @@ async def add_to_food_diary(message: types.Message):
         
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Дневник питания"))
     await message.answer(f'За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\nБЖУ: '
-                        f'{user_info["pfc"]["proteins"]}/{user_info["pfc"]["fats"]}/'
-                        f'{user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["proteins"]}/'
-                        f'{user_info["norm_of_pfc"]["fats"]}/{user_info["norm_of_pfc"]["carbohydrates"]}',
+                        f'{user_info["pfc"]["proteins"]}/{user_info["pfc"]["proteins"]}/'
+                        f'{user_info["pfc"]["fats"]}/{user_info["norm_of_pfc"]["proteins"]}/'
+                        f'{user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["carbohydrates"]}',
                         reply_markup=kb)
 
 
