@@ -2,6 +2,7 @@
 TODO: 
 Надо сделать красивое главное меню и вообще убрать это безобразие !
 
+
 Добавить в админ-панель кнопку (сбросить еду)
 
 Добавить поздравление, если пользователь доел до лимита
@@ -425,7 +426,9 @@ async def food_entry(message: types.Message, state: FSMContext):
     with open(f'users/user_info_{message.chat.id}.json', 'r+', encoding='utf-8') as file:
         user_info = json.load(file)
         user_info['intermediate_result'] = result
+        file.seek(0)
         json.dump(user_info, file, ensure_ascii=False, indent=4)
+        file.truncate()
         
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Да")).row(
         types.KeyboardButton('Нет'))
@@ -445,7 +448,9 @@ async def add_to_food_diary(message: types.Message):
         user_info['pfc']['fats'] += user_info['intermediate_result']['sum_fat']
         user_info['pfc']['carbohydrates'] += user_info['intermediate_result']['sum_carbohydrate']
 
+        file.seek(0)
         json.dump(user_info, file, ensure_ascii=False, indent=4)
+        file.truncate()
         
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Дневник питания"))
     await message.answer(f'За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\nБЖУ: '
