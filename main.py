@@ -422,7 +422,7 @@ async def food_entry(message: types.Message, state: FSMContext):
     mes, result = parse_pfc.parse_pfc(message.text)
     mes += 'Добавить в съеденное за сегодня?'
 
-    with open(f'users/user_info_{message.chat.id}.json', 'rw', encoding='utf-8') as file:
+    with open(f'users/user_info_{message.chat.id}.json', 'r+', encoding='utf-8') as file:
         user_info = json.load(file)
         user_info['intermediate_result'] = result
         json.dump(user_info, file, ensure_ascii=False, indent=4)
@@ -436,7 +436,7 @@ async def food_entry(message: types.Message, state: FSMContext):
 
 @dp.message_handler(text="Да")
 async def add_to_food_diary(message: types.Message):
-    with open(f'users/user_info_{message.chat.id}.json', 'rw', encoding='utf-8') as file:
+    with open(f'users/user_info_{message.chat.id}.json', 'r+', encoding='utf-8') as file:
         user_info = json.load(file)
 
         # Rewrite file with a new data
