@@ -21,10 +21,10 @@
         "carbohydrates": 220
     },
     "intermediate_result": {
-        "sum_weight": 519,
-        "sum_calories": 218,
+        "sum_weight": 0,
+        "sum_calories": 0,
         "sum_protein": 0,
-        "sum_fat": 1,
-        "sum_carbohydrate": 54
+        "sum_fat": 0,
+        "sum_carbohydrate": 0
     }
 }
