@@ -100,7 +100,7 @@ def main_menu_text(message):
           {user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["carbohydrates"]}
           
 Вам осталось выпить {user_info['norm_of_water']}л воды
-или {remaining} стаканов на сегодня."""
+или {int(remaining) * "💧"} стаканов на сегодня."""
 
     return text
 
