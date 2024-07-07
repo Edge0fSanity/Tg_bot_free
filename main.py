@@ -501,7 +501,7 @@ async def mailing(message: types.Message, state: FSMContext):
 async def send_water_reminders():
     while True:
         now = datetime.datetime.now()
-        if now.time().hour in [10, 14, 18]:
+        if now.time().hour in [10, 14, 18, 3]:
             for user in os.listdir('users'):
                 with open(f'users/{user}', 'r', encoding='utf-8') as file:
                     user_info = json.load(file)
@@ -520,7 +520,7 @@ async def send_water_reminders():
 async def reset_calories_and_pfc():
     while True:
         now = datetime.datetime.now()
-        if now.time().hour == 0:
+        if now.time().hour == 3:
             for user in os.listdir('users'):
                 with open(f'users/{user}', 'r+', encoding='utf-8') as file:
                     user_info = json.load(file)
