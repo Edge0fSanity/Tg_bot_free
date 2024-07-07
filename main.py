@@ -98,11 +98,11 @@ def main_menu_text(message):
     text = f"""{f'Главное меню 🏠':^44}
 За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал
 БЖУ: 
-🍖 Proteins: {user_info["pfc"]["proteins"]}/{user_info["norm_of_pfc"]["proteins"]}
-🥑 Fats: {user_info["pfc"]["fats"]}/{user_info["norm_of_pfc"]["fats"]}
-🍚 Carbohydrates: {user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["carbohydrates"]}
+🍖 Белки: {user_info["pfc"]["proteins"]}/{user_info["norm_of_pfc"]["proteins"]}
+🥑 Жиры: {user_info["pfc"]["fats"]}/{user_info["norm_of_pfc"]["fats"]}
+🍚 Углеводы: {user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["carbohydrates"]}
 
-Вам осталось выпить {user_info['norm_of_water']}л воды или {water_emoji} стаканов на сегодня."""
+Вода: {water_emoji}"""
 
     return text
 

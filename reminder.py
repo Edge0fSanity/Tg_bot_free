@@ -15,14 +15,14 @@ async def send_water_reminders():
             for user in os.listdir('users'):
                 with open(f'users/{user}', 'r', encoding='utf-8') as file:
                     user_info = json.load(file)
-                if user_info.get('water_reminder') == 'on' and user_info.get('norm_of_water', 0) > 0:
-                    last_reminder_date = datetime.datetime.strptime(user_info['date_for_water'], "%Y-%m-%d").date()
-                    if last_reminder_date < now.date():
-                        chat_id = user.split('_')[-1].split('.')[0]
-                        await bot.send_message(chat_id, 'Не забудьте выпить воды!')
-                        user_info['date_for_water'] = now.strftime("%Y-%m-%d")
-                        with open(f'users/{user}', 'w', encoding='utf-8') as file:
-                            json.dump(user_info, file, ensure_ascii=False, indent=4)
+                if user_info.get('water_reminder') == 'on' and user_info['norm_of_water'] > 0:
+                    #last_reminder_date = datetime.datetime.strptime(user_info['date_for_water'], "%Y-%m-%d").date()
+                    #if last_reminder_date < now.date():
+                    chat_id = user.split('_')[-1].split('.')[0]
+                    await bot.send_message(chat_id, 'Не забудьте выпить воды!')
+                    user_info['date_for_water'] = now.strftime("%Y-%m-%d")
+                    with open(f'users/{user}', 'w', encoding='utf-8') as file:
+                        json.dump(user_info, file, ensure_ascii=False, indent=4)
             await asyncio.sleep(3600)  # спим один час
 
         await asyncio.sleep(60)  # проверяем каждую минуту
