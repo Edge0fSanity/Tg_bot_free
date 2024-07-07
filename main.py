@@ -92,15 +92,17 @@ def main_menu_text(message):
     with open(f'users/user_info_{message.chat.id}.json', 'r', encoding='utf-8') as file:
         user_info = json.load(file)
 
-    remaining = user_info['norm_of_water'] / 0.25
-    text = f"""Главное меню\n
-За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\n
-БЖУ: {user_info["pfc"]["proteins"]}/{user_info["norm_of_pfc"]["proteins"]}
-          {user_info["pfc"]["fats"]}/{user_info["norm_of_pfc"]["fats"]}
-          {user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["carbohydrates"]}
-          
-Вам осталось выпить {user_info['norm_of_water']}л воды
-или {int(remaining) * "💧"} стаканов на сегодня."""
+    remaining_water = user_info['norm_of_water'] / 0.25
+    water_emoji = "🥛" * int(remaining_water)
+
+    text = f"""{f'Главное меню 🏠':^44}
+За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал
+БЖУ: 
+🍖 Proteins: {user_info["pfc"]["proteins"]}/{user_info["norm_of_pfc"]["proteins"]}
+🥑 Fats: {user_info["pfc"]["fats"]}/{user_info["norm_of_pfc"]["fats"]}
+🍚 Carbohydrates: {user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["carbohydrates"]}
+
+Вам осталось выпить {user_info['norm_of_water']}л воды или {water_emoji} стаканов на сегодня."""
 
     return text
 
