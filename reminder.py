@@ -41,9 +41,8 @@ async def reset_calories_and_pfc():
                         user_info['pfc']['fats'] = 0
                         user_info['pfc']['carbohydrates'] = 0
                         user_info['date_for_calories_and_pfc'] = now.strftime("%Y-%m-%d")
-                        file.seek(0)
                         json.dump(user_info, file, ensure_ascii=False, indent=4)
-                        file.truncate()
+                        
             await asyncio.sleep(3600)  # спим один час
 
         await asyncio.sleep(60)  # проверяем каждую минуту
