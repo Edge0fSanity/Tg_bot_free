@@ -455,10 +455,8 @@ async def add_to_food_diary(message: types.Message):
         file.truncate()
         
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Дневник питания"))
-    await message.answer(f'За сегодня вы съели {user_info["calories"]}/{user_info["norm_of_calories"]} ккал\nБЖУ: \n'
-                        f'{user_info["pfc"]["proteins"]}/{user_info["norm_of_pfc"]["proteins"]}\n'
-                        f'{user_info["pfc"]["fats"]}/{user_info["norm_of_pfc"]["fats"]}\n'
-                        f'{user_info["pfc"]["carbohydrates"]}/{user_info["norm_of_pfc"]["carbohydrates"]}',
+    text =  main_menu_text(message)
+    await message.answer(text,
                         reply_markup=kb)
 
 
@@ -520,6 +518,9 @@ async def reset_calories_and_pfc():
         now = datetime.datetime.now()
         with open(f'users/{user}', 'r+', encoding='utf-8') as file:
             user_info = json.load(file)
+            norm_of_water = float(user_info['weight']) * 0.03
+            norm_of_water = round(norm_of_water * 4) / 4
+            user_info['norm_of_water'] = norm_of_water
             user_info['calories'] = 0
             user_info['pfc']['proteins'] = 0
             user_info['pfc']['fats'] = 0
@@ -530,8 +531,8 @@ async def reset_calories_and_pfc():
             file.truncate()
 
 async def scheduler():
-    aioschedule.every().day.at("00:42").do(reset_calories_and_pfc)
-    for hour in [10, 14, 18, 3]:
+    aioschedule.every().day.at("00:00").do(reset_calories_and_pfc)
+    for hour in [10, 14, 18]:
         aioschedule.every().day.at(f"{hour}:00").do(send_water_reminders)
     while True:
         await aioschedule.run_pending()
