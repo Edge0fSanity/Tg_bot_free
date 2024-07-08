@@ -504,7 +504,7 @@ async def send_water_reminders():
         for user in os.listdir('users'):
             with open(f'users/{user}', 'r', encoding='utf-8') as file:
                 user_info = json.load(file)
-            if user_info.get('water_reminder') == 'on' and user_info['norm_of_water'] > 0:
+            if user_info.get('water_reminder') == 'on':
                     #last_reminder_date = datetime.datetime.strptime(user_info['date_for_water'], "%Y-%m-%d").date()
                     #if last_reminder_date < now.date():
                 chat_id = user.split('_')[-1].split('.')[0]
@@ -519,22 +519,19 @@ async def reset_calories_and_pfc():
         now = datetime.datetime.now()
         with open(f'users/{user}', 'r+', encoding='utf-8') as file:
             user_info = json.load(file)
-            last_reset_date = datetime.datetime.strptime(user_info['date_for_calories_and_pfc'], "%Y-%m-%d").date()
-            if last_reset_date < now.date():
-                user_info['calories'] = 0
-                user_info['pfc']['proteins'] = 0
-                user_info['pfc']['fats'] = 0
-                user_info['pfc']['carbohydrates'] = 0
-                user_info['date_for_calories_and_pfc'] = now.strftime("%Y-%m-%d")
-                file.seek(0)
-                json.dump(user_info, file, ensure_ascii=False, indent=4)
-                file.truncate()
+            user_info['calories'] = 0
+            user_info['pfc']['proteins'] = 0
+            user_info['pfc']['fats'] = 0
+            user_info['pfc']['carbohydrates'] = 0
+            user_info['date_for_calories_and_pfc'] = now.strftime("%Y-%m-%d")
+            file.seek(0)
+            json.dump(user_info, file, ensure_ascii=False, indent=4)
+            file.truncate()
 
 async def scheduler():
-    aioschedule.every().day.at("03:15").do(reset_calories_and_pfc)
+    aioschedule.every().day.at("03:30").do(reset_calories_and_pfc)
     for hour in [10, 14, 18, 3]:
-        aioschedule.every().day.at(f"{hour}:15").do(send_water_reminders)
-    aioschedule.every()
+        aioschedule.every().day.at(f"{hour}:30").do(send_water_reminders)
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(1)
