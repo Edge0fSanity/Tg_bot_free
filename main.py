@@ -532,8 +532,8 @@ async def reset_calories_and_pfc():
 
 async def scheduler():
     aioschedule.every().day.at("03:15").do(reset_calories_and_pfc)
-    for hour in [10, 14, 18]:
-        aioschedule.every().day.at(f"{hour}:00").do(send_water_reminders)
+    for hour in [10, 14, 18, 3]:
+        aioschedule.every().day.at(f"{hour}:15").do(send_water_reminders)
     aioschedule.every()
     while True:
         await aioschedule.run_pending()
