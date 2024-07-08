@@ -485,7 +485,7 @@ async def mailing(message: types.Message):
         await message.answer("У вас нет прав администратора")
 
 
-@dp.message_handler(state=AdminForm.text, content_types=['photo'])
+@dp.message_handler(state=AdminForm.text, content_types=['text', 'photo'])
 async def mailing(message: types.Message, state: FSMContext):
     for user in os.listdir('users'):
         user = user.split('_')[-1].split('.')[0]
@@ -497,6 +497,7 @@ async def mailing(message: types.Message, state: FSMContext):
     await state.finish()
     await message.answer("Рассылка завершена",reply_markup=types.ReplyKeyboardMarkup
     (resize_keyboard=True).row(types.KeyboardButton(text="Назад")))
+
 
 
 async def send_water_reminders():
@@ -529,9 +530,9 @@ async def reset_calories_and_pfc():
             file.truncate()
 
 async def scheduler():
-    aioschedule.every().day.at("03:30").do(reset_calories_and_pfc)
+    aioschedule.every().day.at("00:42").do(reset_calories_and_pfc)
     for hour in [10, 14, 18, 3]:
-        aioschedule.every().day.at(f"{hour}:30").do(send_water_reminders)
+        aioschedule.every().day.at(f"{hour}:00").do(send_water_reminders)
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(1)
