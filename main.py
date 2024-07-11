@@ -110,7 +110,8 @@ def main_menu_text(message):
 async def help(message: types.Message):
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Начать"))
     await message.answer(
-        f"Появился вопрос ?\n"
+        f"Чтобы выключить уведомления о воде, перейдите в меню напоминания \n"
+        f"Другой вопрос ?\n"
         f"Можешь написать разработчику - @edge0fsanity\n"
         f"Может быть тебе помогут эти 2 примера ?", reply_markup=kb)
     await bot.send_photo(message.from_user.id, photo=InputFile("start_picture.jpg"))
@@ -255,7 +256,7 @@ async def form(message: types.Message, state: FSMContext):
         "weight": data['weight'],
         "goal": data['goal'],
         "activity": data['activity'],
-        "water_reminder": "off",
+        "water_reminder": "on",
         "norm_of_water": norm_of_water,
         "date_for_water": datetime.datetime.now().strftime("%Y-%m-%d"),
         "date_for_calories_and_pfc": datetime.datetime.now().strftime("%Y-%m-%d"),
@@ -423,7 +424,7 @@ async def food_entry(message: types.Message):
 async def food_entry(message: types.Message, state: FSMContext):
     if message.text == 'Назад':
         await state.finish()
-        main_menu(message)
+        await main_menu(message)
     else:
         mes_del = await message.answer("Подождите, идет обработка запроса...")
         mes, result = parse_pfc.parse_pfc(message.text)
@@ -473,7 +474,7 @@ async def add_to_food_diary(message: types.Message):
 @dp.message_handler(commands=['admin'])
 async def admin(message: types.Message):
     if message.chat.id in admins_id:
-        kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Сделать рассылку")).row('Назад')
+        kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Сделать рассылку")).row(types.KeyboardButton(text="Список пользователей")).row('Назад')
         await message.answer("Админ панель", reply_markup=kb)
     else:
         await message.answer("У вас нет прав администратора")
