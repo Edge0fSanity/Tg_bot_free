@@ -421,22 +421,26 @@ async def food_entry(message: types.Message):
 
 @dp.message_handler(state=FormFood.food)
 async def food_entry(message: types.Message, state: FSMContext):
-    mes_del = await message.answer("Подождите, идет обработка запроса...")
-    mes, result = parse_pfc.parse_pfc(message.text)
-    mes += 'Добавить в съеденное за сегодня?'
+    if message.text == 'Назад':
+        await state.finish()
+        main_menu(message)
+    else:
+        mes_del = await message.answer("Подождите, идет обработка запроса...")
+        mes, result = parse_pfc.parse_pfc(message.text)
+        mes += 'Добавить в съеденное за сегодня?'
 
-    with open(f'users/user_info_{message.chat.id}.json', 'r+', encoding='utf-8') as file:
-        user_info = json.load(file)
-        user_info['intermediate_result'] = result
-        file.seek(0)
-        json.dump(user_info, file, ensure_ascii=False, indent=4)
-        file.truncate()
-        
-    kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Да")).row(
-        types.KeyboardButton('Нет'))
-    await bot.delete_message(chat_id=message.chat.id, message_id=mes_del.message_id)
-    await message.answer(mes, reply_markup=kb)
-    await state.finish()
+        with open(f'users/user_info_{message.chat.id}.json', 'r+', encoding='utf-8') as file:
+            user_info = json.load(file)
+            user_info['intermediate_result'] = result
+            file.seek(0)
+            json.dump(user_info, file, ensure_ascii=False, indent=4)
+            file.truncate()
+            
+        kb = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton(text="Да")).row(
+            types.KeyboardButton('Нет'))
+        await bot.delete_message(chat_id=message.chat.id, message_id=mes_del.message_id)
+        await message.answer(mes, reply_markup=kb)
+        await state.finish()
 
 
 @dp.message_handler(text="Да")
