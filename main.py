@@ -52,14 +52,14 @@ def count_norm_of_calories(user_info):
         kfa = 1
     elif user_info['activity'] == "Легкая активность (небольшие упражнения 1-3 раза в неделю)":
         kfa = 1.3
-    else:
+    else: # т.е. высокая активность
         kfa = 1.5
     if user_info['goal'] == "Набор массы":
-        kc = 1.1
+        kc = 1.05
     elif user_info['goal'] == "Оставаться в форме":
         kc = 1
-    else:
-        kc = 0.9
+    else: # т.е. снижение массы
+        kc = 0.95
     if user_info['gender'] == 'Женский':
         if 18 <= int(user_info['age']) <= 30:
             user_info['norm_of_calories'] = round((0.062 * float(user_info['weight']) + 2.036) * 240 * kfa * kc)
@@ -492,10 +492,13 @@ async def mailing(message: types.Message):
 async def mailing(message: types.Message, state: FSMContext):
     for user in os.listdir('users'):
         user = user.split('_')[-1].split('.')[0]
-        if message.photo:
-            await bot.send_photo(user, photo=message.photo[-1].file_id, caption=message.caption)
-        else:
-            await bot.send_message(user, message.text)
+        try:
+            if message.photo:
+                await bot.send_photo(user, photo=message.photo[-1].file_id, caption=message.caption)
+            else:
+                await bot.send_message(user, message.text)
+        finally:
+            pass
     logging.info("[INFO] Admin has sent a message")
     await state.finish()
     await message.answer("Рассылка завершена",reply_markup=types.ReplyKeyboardMarkup
