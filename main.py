@@ -7,7 +7,7 @@ TODO:
 """
 
 
-
+import aiogram
 from aiogram import Bot, Dispatcher, types, executor
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
@@ -497,6 +497,8 @@ async def mailing(message: types.Message, state: FSMContext):
                 await bot.send_photo(user, photo=message.photo[-1].file_id, caption=message.caption)
             else:
                 await bot.send_message(user, message.text)
+        except aiogram.utils.exceptions.BotBlocked:
+            pass
         finally:
             pass
     logging.info("[INFO] Admin has sent a message")
