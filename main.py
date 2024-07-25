@@ -517,7 +517,10 @@ async def send_water_reminders():
                     #last_reminder_date = datetime.datetime.strptime(user_info['date_for_water'], "%Y-%m-%d").date()
                     #if last_reminder_date < now.date():
                 chat_id = user.split('_')[-1].split('.')[0]
-                await bot.send_message(chat_id, 'Не забудьте выпить воды!')
+                try:
+                    await bot.send_message(chat_id, 'Не забудьте выпить воды!')
+                except aiogram.utils.exceptions.BotBlocked:
+                    pass
                 user_info['date_for_water'] = now.strftime("%Y-%m-%d")
                 with open(f'users/{user}', 'w', encoding='utf-8') as file:
                     json.dump(user_info, file, ensure_ascii=False, indent=4)
