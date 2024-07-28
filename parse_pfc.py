@@ -59,8 +59,8 @@ def parse_pfc(query):
         sum_fat = 0
         sum_carbohydrate = 0
         for product in result:
-            message += (f"<b>{translate_from_eng_to_rus(product.food_name)}</b> {product.serving_weight_grams} г / "
-                        f"{product.nf_calories} ккал\nБЖУ {product.nf_protein}/{product.nf_total_fat}/{product.nf_total_carbohydrate}\n")
+            #message += (f"<b>{translate_from_eng_to_rus(product.food_name)}</b> {product.serving_weight_grams} г / "
+            #           f"{product.nf_calories} ккал\nБЖУ {product.nf_protein}/{product.nf_total_fat}/{product.nf_total_carbohydrate}\n")
             sum_weight += product.serving_weight_grams
             sum_calories += product.nf_calories
             sum_protein += product.nf_protein
